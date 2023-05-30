@@ -59,53 +59,47 @@ tasks.named('test') {
 
 publishing {
     publications {
-        //mavenJava(MavenPublication) {
-        //    artifactId = 'db-helper'
-        //    from components.java
-        //    versionMapping {
-        //        usage('java-api') {
-        //            fromResolutionOf('runtimeClasspath')
-        //        }
-        //        usage('java-runtime') {
-        //            fromResolutionResult()
-        //        }
-        //    }
-        //    pom {
-        //        name = 'JVM-DBHelper'
-        //        description = 'An library to help you with DB things in general'
-        //        url = 'https://github.com/torres-developer/JVM-DBHelper'
-        //        properties = [
-        //            myProp: "value",
-        //            "prop.with.dots": "anotherValue"
-        //        ]
-        //        licenses {
-        //            license {
-        //                name = 'GNU General Public License'
-        //                url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
-        //            }
-        //        }
-        //        developers {
-        //            developer {
-        //                id = 'torres-developer'
-        //                name = 'João Augusto Costa Branco Marado Torres'
-        //                email = 'torres.dev@disroot.org'
-        //            }
-        //        }
-        //        scm {
-        //            connection = 'https://github.com/torres-developer/JVM-DBHelper.git'
-        //            developerConnection = 'git@github.com:torres-developer/JVM-DBHelper.git'
-        //            url = 'https://github.com/torres-developer/JVM-DBHelper'
-        //        }
-        //    }
-        //}
+        mavenJava(MavenPublication) {
+            artifactId = project.name
+            from components.java
+            versionMapping {
+                usage('java-api') {
+                    fromResolutionOf('runtimeClasspath')
+                }
+                usage('java-runtime') {
+                    fromResolutionResult()
+                }
+            }
+            pom {
+                name = 'JVM-DBHelper'
+                description = 'An library to help you with DB things in general'
+                url = 'https://github.com/torres-developer/JVM-DBHelper'
+                licenses {
+                    license {
+                        name = 'GNU General Public License'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'torres-developer'
+                        name = 'João Augusto Costa Branco Marado Torres'
+                        email = 'torres.dev@disroot.org'
+                    }
+                }
+                scm {
+                    connection = 'https://github.com/torres-developer/JVM-DBHelper.git'
+                    developerConnection = 'git@github.com:torres-developer/JVM-DBHelper.git'
+                    url = 'https://github.com/torres-developer/JVM-DBHelper'
+                }
+            }
+        }
         gpr(MavenPublication) {
             from(components.java)
         }
     }
     repositories {
         maven {
-            // url = 'https://jitpack.io'
-
             // name = 'JVM-DBHelper'
             // url = 'https://github.com/torres-developer/JVM-DBHelper'
 
@@ -120,7 +114,7 @@ publishing {
 }
 
 signing {
-    // sign publishing.publications.mavenJava
+    sign publishing.publications.mavenJava
 }
 
 javadoc {
@@ -130,4 +124,4 @@ javadoc {
 }
 
 group = 'com.github.torres_developer'
-version = '0.0.2'
+version = '0.0.3'
