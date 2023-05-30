@@ -4,7 +4,7 @@ package dbhelper.db_defenitions
  * A representation of a SQL TABLE
  *
  * @property name the name of the table
- * @constructor Creates a empty SQL TABLE with the [name] provided
+ * @constructor Creates an empty SQL TABLE with the [name] provided
  */
 class Table(private val name: String) {
     private val cols: MutableList<Column> = mutableListOf()
@@ -13,7 +13,7 @@ class Table(private val name: String) {
         this.addColumn(Column(col, Type.INT).pk().autoIncrement(auto_increment))
     }
 
-    fun addColumn(vararg cols: Column) = apply {
+    private fun addColumn(vararg cols: Column) = apply {
         this.cols.addAll(cols)
     }
 

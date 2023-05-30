@@ -13,10 +13,8 @@ abstract class TableManager<T : Model> {
     abstract fun name(): String
     protected abstract fun manageTable(table: Table)
 
-    // final public fun createTable(): String = this.table.createSQLQuery()
-    // final public fun deleteTable(): String = this.table.dropSQLQuery()
-    fun createTable(): String = ""
-    fun deleteTable(): String = ""
+    fun createTable(): String = this.table.getCreateSQLQuery()
+    fun deleteTable(): String = this.table.getDropSQLQuery()
 
     abstract fun init(): T
 
