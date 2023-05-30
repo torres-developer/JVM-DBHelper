@@ -59,8 +59,10 @@ tasks.named('test') {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        gpr(MavenPublication) {
             artifactId = project.name
+            groupId = project.group
+            version = project.version
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -88,14 +90,11 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'https://github.com/torres-developer/JVM-DBHelper.git'
-                    developerConnection = 'git@github.com:torres-developer/JVM-DBHelper.git'
+                    connection = 'scm:git:https://github.com/torres-developer/JVM-DBHelper.git'
+                    developerConnection = 'scm:git:git@github.com:torres-developer/JVM-DBHelper.git'
                     url = 'https://github.com/torres-developer/JVM-DBHelper'
                 }
             }
-        }
-        gpr(MavenPublication) {
-            from(components.java)
         }
     }
     repositories {
@@ -114,7 +113,7 @@ publishing {
 }
 
 signing {
-    sign publishing.publications.mavenJava
+    sign publishing.publications.gpr
 }
 
 javadoc {
@@ -124,4 +123,4 @@ javadoc {
 }
 
 group = 'com.github.torres_developer'
-version = '0.0.3'
+version = '0.0.4'
