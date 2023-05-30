@@ -61,8 +61,8 @@ publishing {
     publications {
         gpr(MavenPublication) {
             artifactId = project.name
-            groupId = project.group
-            version = project.version
+            groupId = 'com.github.torres_developer'
+            version = '0.0.5'
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -123,4 +123,4 @@ javadoc {
 }
 
 group = 'com.github.torres_developer'
-version = '0.0.4'
+version = '0.0.5'
