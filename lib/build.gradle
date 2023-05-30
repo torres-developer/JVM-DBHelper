@@ -59,10 +59,8 @@ tasks.named('test') {
 
 publishing {
     publications {
-        gpr(MavenPublication) {
-            artifactId = project.name
-            groupId = 'com.github.torres_developer'
-            version = '0.0.5'
+        mavenJava(MavenPublication) {
+            artifactId = 'JVM-DBHelper'
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -98,22 +96,15 @@ publishing {
         }
     }
     repositories {
+        mavenCentral()
         maven {
-            // name = 'JVM-DBHelper'
-            // url = 'https://github.com/torres-developer/JVM-DBHelper'
-
-            name = 'GitHubPackages'
-            url = uri("https://maven.pkg.github.com/torres-developer/JVM-DBHelper")
-            credentials {
-                username = project.findProperty("gpr.user")
-                password = project.findProperty("gpr.key")
-            }
+            url 'https://jitpack.io'
         }
     }
 }
 
 signing {
-    sign publishing.publications.gpr
+    sign publishing.publications.mavenJava
 }
 
 javadoc {
@@ -123,4 +114,4 @@ javadoc {
 }
 
 group = 'com.github.torres_developer'
-version = '0.0.5'
+version = '0.0.6'
