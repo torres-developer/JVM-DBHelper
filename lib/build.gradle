@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'com.github.torres-developer'
-version = '0.0.7'
+version = '0.0.8'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -40,7 +40,7 @@ java {
 
 tasks.named('jar') {
     manifest {
-        attributes('Implementation-Title': 'JVM-DBHelper',
+        attributes('Implementation-Title': 'jvmdbhelper',
             'Implementation-Version': project.version)
     }
 }
@@ -52,7 +52,7 @@ tasks.named('compileJava') {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'JVM-DBHelper'
+            artifactId = 'jvmdbhelper'
             from components.java
             versionMapping {
                 usage('java-api') {
@@ -63,9 +63,9 @@ publishing {
                 }
             }
             pom {
-                name = 'JVM-DBHelper'
+                name = 'jvmdbhelper'
                 description = 'An library to help you with DB things in general'
-                url = 'https://github.com/torres-developer/JVM-DBHelper'
+                url = 'https://github.com/torres-developer/jvmdbhelper'
                 licenses {
                     license {
                         name = 'GNU General Public License'
@@ -80,9 +80,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:https://github.com/torres-developer/JVM-DBHelper.git'
-                    developerConnection = 'scm:git:git@github.com:torres-developer/JVM-DBHelper.git'
-                    url = 'https://github.com/torres-developer/JVM-DBHelper'
+                    connection = 'scm:git:https://github.com/torres-developer/jvmdbhelper.git'
+                    developerConnection = 'scm:git:git@github.com:torres-developer/jvmdbhelper.git'
+                    url = 'https://github.com/torres-developer/jvmdbhelper'
                 }
             }
         }
