@@ -7,10 +7,19 @@
  * in the user manual at https://docs.gradle.org/8.1.1/userguide/multi_project_builds.html
  */
 
-plugins {
-    // Apply the foojay-resolver plugin to allow automatic download of JDKs
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.gradle.toolchains:foojay-resolver:0.5.0"
+    }
 }
+
+// Apply the foojay-resolver plugin to allow automatic download of JDKs
+apply plugin: "org.gradle.toolchains.foojay-resolver-convention"
 
 rootProject.name = 'jvmdbhelper'
 include('lib')
