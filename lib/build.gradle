@@ -17,18 +17,15 @@ plugins {
     id 'signing'
 }
 
+group = 'com.github.torres-developer'
+version = '0.0.6'
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
-    // Use the Kotlin JUnit 5 integration.
-    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
-
-    // Use the JUnit 5 integration.
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-
     implementation group: 'org.jetbrains.kotlin', name: 'kotlin-reflect', version: '1.3.41'
 }
 
@@ -50,11 +47,6 @@ tasks.named('jar') {
 
 tasks.named('compileJava') {
     options.javaModuleVersion = provider { version }
-}
-
-tasks.named('test') {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
 }
 
 publishing {
@@ -95,12 +87,6 @@ publishing {
             }
         }
     }
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://jitpack.io'
-        }
-    }
 }
 
 signing {
@@ -112,6 +98,3 @@ javadoc {
         options.addBooleanOption('html5', true)
     }
 }
-
-group = 'com.github.torres_developer'
-version = '0.0.6'
