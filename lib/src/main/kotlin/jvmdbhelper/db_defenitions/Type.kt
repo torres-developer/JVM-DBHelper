@@ -1,4 +1,4 @@
-package dbhelper.db_defenitions
+package jvmdbhelper.db_defenitions
 
 enum class Type(val type: String) {
     INT("INTEGER"),

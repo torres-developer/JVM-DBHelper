@@ -1,4 +1,4 @@
-package dbhelper.db_defenitions
+package jvmdbhelper.db_defenitions
 
 /**
  * A representation of a SQL TABLE

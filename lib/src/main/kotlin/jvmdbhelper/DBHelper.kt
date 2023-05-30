@@ -1,4 +1,4 @@
-package dbhelper
+package jvmdbhelper
 
 import dbhelper.model.Model
 import dbhelper.model.TableManager

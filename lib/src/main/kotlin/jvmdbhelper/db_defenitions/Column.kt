@@ -1,4 +1,4 @@
-package dbhelper.db_defenitions
+package jvmdbhelper.db_defenitions
 
 class Column(private val name: String, private val type: Type) {
     private var unique = false

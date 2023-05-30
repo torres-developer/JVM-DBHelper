@@ -1,7 +1,7 @@
-package dbhelper.model
+package jvmdbhelper.model
 
-import dbhelper.DBHost
-import dbhelper.db_defenitions.Table
+import jvmdbhelper.DBHost
+import jvmdbhelper.db_defenitions.Table
 
 abstract class TableManager<T : Model> {
     protected val table: Table by lazy {
