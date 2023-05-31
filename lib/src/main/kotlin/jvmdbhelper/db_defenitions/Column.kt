@@ -32,4 +32,5 @@ class Column(private val name: String, private val type: Type) {
     fun isPrimaryKey(): Boolean = this.unique && !this.nullable
 
     fun getName(): String = this.name
+    fun getType(): Type = this.type
 }

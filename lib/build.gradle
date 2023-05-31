@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'com.github.torres-developer'
-version = '0.5.0'
+version = '0.5.1'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -59,6 +59,7 @@ publishing {
                     fromResolutionOf('runtimeClasspath')
                 }
                 usage('java-runtime') {
+                    //noinspection GroovyImplicitNullArgumentCall
                     fromResolutionResult()
                 }
             }

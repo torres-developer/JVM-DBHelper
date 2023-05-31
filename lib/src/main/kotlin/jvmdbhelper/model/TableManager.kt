@@ -2,6 +2,7 @@ package jvmdbhelper.model
 
 import jvmdbhelper.DBProxy
 import jvmdbhelper.db_defenitions.Table
+import jvmdbhelper.db_defenitions.Type
 import jvmdbhelper.db_defenitions.Where
 
 abstract class TableManager<T : Model> {
@@ -103,4 +104,6 @@ abstract class TableManager<T : Model> {
             null
         }
     }
+
+    fun getColType(col: String): Type = this.table.getColType(col)
 }
