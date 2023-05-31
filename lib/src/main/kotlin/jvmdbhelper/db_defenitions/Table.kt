@@ -13,7 +13,7 @@ class Table(private val name: String) {
         this.addColumn(Column(col, Type.INT).pk().autoIncrement(auto_increment))
     }
 
-    private fun addColumn(vararg cols: Column) = apply {
+    fun addColumn(vararg cols: Column) = apply {
         this.cols.addAll(cols)
     }
 

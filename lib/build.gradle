@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'com.github.torres-developer'
-version = '0.0.15'
+version = '0.1.0'
 
 repositories {
     // Use Maven Central for resolving dependencies.

@@ -9,4 +9,10 @@ class DBHelper(private val dbh: DBHost) {
             dbh.exec(model.createTable())
         }
     }
+
+    fun deleteTable(vararg models: TableManager<out Model>) {
+        for (model in models) {
+            dbh.exec(model.deleteTable())
+        }
+    }
 }
