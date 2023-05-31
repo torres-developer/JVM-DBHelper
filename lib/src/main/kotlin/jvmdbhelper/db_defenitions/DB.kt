@@ -6,6 +6,7 @@ typealias Migrations = Map<UInt, Migration>
 
 abstract class DB {
     abstract fun name(): String
+    abstract fun version(): UInt
 
     abstract fun genMigrations(): Migrations
 
