@@ -26,4 +26,8 @@ class Table(private val name: String) {
     }
 
     fun getDropSQLQuery(): String = "DROP TABLE `$name`;"
+
+    fun getPrimaryKeys(): List<String> {
+        return this.cols.filter { it.isPrimaryKey() } . map { it.getName() }
+    }
 }

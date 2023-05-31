@@ -1,5 +1,10 @@
 package jvmdbhelper.model
 
+typealias Values = Map<String, Any>
+
 interface Model {
-    fun populateFromMap(values: Map<String, Any>)
+    fun fromMap(values: Values)
+
+    fun getImmutable(): Values
+    fun getMutable(): Values
 }

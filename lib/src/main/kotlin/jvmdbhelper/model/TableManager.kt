@@ -24,13 +24,54 @@ abstract class TableManager<T : Model> {
         val queries = keys.joinToString(separator = ", ") { "?" }
         val listValues = mutableListOf<Any>()
         for (v in keys) {
-            listValues.add(v)
+            listValues.add(values.get(v) ?: "NULL") // throw, default or null
         }
 
-        dbh.exec("INSERT INTO `$this.name`($cols) VALUES ($queries);", listValues)
+        dbh.exec("INSERT INTO `${this.name()}`($cols) VALUES ($queries);", listValues)
 
         val model = this.init()
-        model.populateFromMap(values)
+        model.fromMap(values)
         return model
     }
+
+    fun create(dbh: DBHost, model: T): T {
+        return this.create(dbh, model.getMutable())
+    }
+
+    fun update(dbh: DBHost, model: T): T {
+        val mutable = model.getMutable()
+        val keys = mutable.keys
+        val set = keys.joinToString(separator = ", ") { "$it=?" }
+        val values = mutableListOf<Any>()
+        for (v in keys) {
+            values.add(mutable.get(v) ?: "NULL") // throw, default or null
+        }
+        val where = this.getModelFilter(model)
+        values.addAll(where.values)
+
+        dbh.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
+
+        return model;
+    }
+
+    fun delete(dbh: DBHost, model: T): T {
+        val where = this.getModelFilter(model)
+        dbh.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
+
+        return model;
+    }
+
+    final protected fun getModelFilter(model: T): Where {
+        val values = mutableListOf<Any>()
+        val ids = model.getImmutable()
+        val primaryKeys = this.table.getPrimaryKeys()
+        val where = primaryKeys.joinToString(separator = " AND ") { "`$it`=?" }
+        for (v in primaryKeys) {
+            values.add(ids.get(v) ?: throw Exception())
+        }
+
+        return Where("WHERE $where", values)
+    }
 }
+
+data class Where(val statement: String, val values: List<Any>) {}

@@ -28,4 +28,8 @@ class Column(private val name: String, private val type: Type) {
                 "${if (this.nullable) "" else " NOT"} NULL" +
                 (if (this.autoIncrement) " UNIQUE" else "")
     }
+
+    fun isPrimaryKey(): Boolean = this.unique && !this.nullable
+
+    fun getName(): String = this.name
 }
