@@ -10,11 +10,11 @@ class Column(private val name: String, private val type: Type) {
         this.nullable(false)
     }
 
-    private fun unique(b: Boolean = true) = apply {
+    fun unique(b: Boolean = true) = apply {
         this.unique = b
     }
 
-    private fun nullable(b: Boolean = true) = apply {
+    fun nullable(b: Boolean = true) = apply {
         this.nullable = b
     }
 
