@@ -19,7 +19,7 @@ abstract class TableManager<T : Model> {
 
     abstract fun init(): T
 
-    fun create(dbh: DBProxy, values: Map<String, Any>): T {
+    fun create(proxy: DBProxy, values: Map<String, Any>): T {
         val keys = values.keys
         val cols = keys.joinToString(separator = ", ") { "`$it`" }
         val queries = keys.joinToString(separator = ", ") { "?" }
@@ -28,18 +28,28 @@ abstract class TableManager<T : Model> {
             listValues.add(values[v] ?: "NULL") // throw, default or null
         }
 
-        dbh.exec("INSERT INTO `${this.name()}`($cols) VALUES ($queries);", listValues)
+        proxy.exec("INSERT INTO `${this.name()}`($cols) VALUES ($queries);", listValues)
 
         val model = this.init()
         model.fromMap(values)
         return model
     }
 
-    fun create(dbh: DBProxy, model: T): T {
-        return this.create(dbh, model.getMutable())
+    fun create(proxy: DBProxy, model: T): T {
+        return this.create(proxy, model.getMutable())
     }
 
-    fun update(dbh: DBProxy, model: T): T {
+    fun read(proxy: DBProxy, filter: Map<String, Any>): Iterable<T> {
+        val keys = filter.keys
+        val where = this.createWhereStatement(keys)
+        val values = mutableListOf<Any>()
+        for (v in keys) {
+            values.add(filter[v] ?: throw Exception())
+        }
+        return proxy.query("SELECT * FROM ${this.name()} $where;", values, this)
+    }
+
+    fun update(proxy: DBProxy, model: T): T {
         val mutable = model.getMutable()
         val keys = mutable.keys
         val set = keys.joinToString(separator = ", ") { "$it=?" }
@@ -50,14 +60,14 @@ abstract class TableManager<T : Model> {
         val where = this.getModelFilter(model)
         values.addAll(where.values)
 
-        dbh.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
+        proxy.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
 
         return model
     }
 
-    fun delete(dbh: DBProxy, model: T): T {
+    fun delete(proxy: DBProxy, model: T): T {
         val where = this.getModelFilter(model)
-        dbh.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
+        proxy.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
 
         return model
     }
@@ -66,11 +76,15 @@ abstract class TableManager<T : Model> {
         val values = mutableListOf<Any>()
         val ids = model.getImmutable()
         val primaryKeys = this.table.getPrimaryKeys()
-        val where = primaryKeys.joinToString(separator = " AND ") { "`$it`=?" }
+        val where = this.createWhereStatement(primaryKeys)
         for (v in primaryKeys) {
             values.add(ids[v] ?: throw Exception())
         }
 
         return Where("WHERE $where", values)
+    }
+
+    private fun createWhereStatement(keys: Set<String>): String {
+        return keys.joinToString(separator = " AND ", prefix = "WHERE ") { "`$it`=?" }
     }
 }
