@@ -1,6 +1,6 @@
 package jvmdbhelper.model
 
-import jvmdbhelper.DBHost
+import jvmdbhelper.DBProxy
 import jvmdbhelper.db_defenitions.Table
 
 abstract class TableManager<T : Model> {
@@ -18,7 +18,7 @@ abstract class TableManager<T : Model> {
 
     abstract fun init(): T
 
-    fun create(dbh: DBHost, values: Map<String, Any>): T {
+    fun create(dbh: DBProxy, values: Map<String, Any>): T {
         val keys = values.keys
         val cols = keys.joinToString(separator = ", ") { "`$it`" }
         val queries = keys.joinToString(separator = ", ") { "?" }
@@ -34,11 +34,11 @@ abstract class TableManager<T : Model> {
         return model
     }
 
-    fun create(dbh: DBHost, model: T): T {
+    fun create(dbh: DBProxy, model: T): T {
         return this.create(dbh, model.getMutable())
     }
 
-    fun update(dbh: DBHost, model: T): T {
+    fun update(dbh: DBProxy, model: T): T {
         val mutable = model.getMutable()
         val keys = mutable.keys
         val set = keys.joinToString(separator = ", ") { "$it=?" }
@@ -54,7 +54,7 @@ abstract class TableManager<T : Model> {
         return model;
     }
 
-    fun delete(dbh: DBHost, model: T): T {
+    fun delete(dbh: DBProxy, model: T): T {
         val where = this.getModelFilter(model)
         dbh.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
 

@@ -3,16 +3,18 @@ package jvmdbhelper
 import jvmdbhelper.model.Model
 import jvmdbhelper.model.TableManager
 
-class DBHelper(private val dbh: DBHost) {
-    fun createTable(vararg models: TableManager<out Model>) {
+abstract class DBHelper() {
+    abstract protected var proxy: DBProxy
+
+    final fun createTable(vararg models: TableManager<out Model>) {
         for (model in models) {
-            dbh.exec(model.createTable())
+            this.proxy.exec(model.createTable())
         }
     }
 
-    fun deleteTable(vararg models: TableManager<out Model>) {
+    final fun deleteTable(vararg models: TableManager<out Model>) {
         for (model in models) {
-            dbh.exec(model.deleteTable())
+            this.proxy.exec(model.deleteTable())
         }
     }
 }

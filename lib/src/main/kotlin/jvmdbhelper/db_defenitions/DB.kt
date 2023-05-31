@@ -7,15 +7,19 @@ typealias Migrations = Map<UInt, Migration>
 abstract class DB {
     abstract fun name(): String
 
-    abstract fun migrations(): Migrations
+    abstract fun genMigrations(): Migrations
 
-    protected val migrations: Migrations by lazy { this.migrations() }
+    protected val migrations: Migrations by lazy { this.genMigrations() }
 
     final fun migrate(db: DBHelper, from: UInt, to: UInt) {
         val upgrading = from < to
 
-        versions@ for (i in from..to) {
-            val m = this.migrations.get(i) ?: continue@versions
+        for (i in from..to) {
+            val m = this.migrations.get(i)
+            if (m == null) {
+                continue
+            }
+
             if (upgrading) {
                 m.upgrade(db)
             } else {
