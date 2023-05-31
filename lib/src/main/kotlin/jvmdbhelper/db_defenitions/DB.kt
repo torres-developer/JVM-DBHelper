@@ -15,7 +15,7 @@ abstract class DB {
         val upgrading = from < to
 
         versions@ for (i in from..to) {
-            val m = this.migrations.getOrElse(i) { continue@versions }
+            val m = this.migrations.get(i) ?: continue@versions
             if (upgrading) {
                 m.upgrade(db)
             } else {
