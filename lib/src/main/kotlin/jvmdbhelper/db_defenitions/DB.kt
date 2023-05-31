@@ -11,7 +11,7 @@ abstract class DB {
 
     private val migrations: Migrations by lazy { this.genMigrations() }
 
-    fun migrate(db: DBHelper, from: UInt, to: UInt) {
+    fun doMigration(db: DBHelper, from: UInt, to: UInt) {
         val upgrading = from < to
 
         for (i in from..to) {
@@ -25,7 +25,7 @@ abstract class DB {
         }
     }
 
-    fun create(db: DBHelper) {
+    fun doCreation(db: DBHelper) {
         this.migrations[1u]?.upgrade(db) ?: throw Exception("No migration for first version")
     }
 }
