@@ -46,7 +46,11 @@ abstract class TableManager<T : Model> {
         for (v in keys) {
             values.add(filter[v] ?: throw Exception())
         }
-        return proxy.query("SELECT * FROM ${this.name()} $where;", values, this)
+        return if (where is String) {
+            proxy.query("SELECT * FROM ${this.name()} $where;", values, this)
+        } else {
+            proxy.query("SELECT * FROM ${this.name()};", values, this)
+        }
     }
 
     fun update(proxy: DBProxy, model: T): T {
@@ -60,14 +64,22 @@ abstract class TableManager<T : Model> {
         val where = this.getModelFilter(model)
         values.addAll(where.values)
 
-        proxy.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
+        if (where.statement is String) {
+            proxy.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
+        } else {
+            proxy.exec("UPDATE `${this.name()}` SET $set;")
+        }
 
         return model
     }
 
     fun delete(proxy: DBProxy, model: T): T {
         val where = this.getModelFilter(model)
-        proxy.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
+        if (where.statement is String) {
+            proxy.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
+        } else {
+            proxy.exec("DELETE FROM `${this.name()}`;")
+        }
 
         return model
     }
@@ -81,10 +93,14 @@ abstract class TableManager<T : Model> {
             values.add(ids[v] ?: throw Exception())
         }
 
-        return Where("WHERE $where", values)
+        return Where(where, values)
     }
 
-    private fun createWhereStatement(keys: Set<String>): String {
-        return keys.joinToString(separator = " AND ", prefix = "WHERE ") { "`$it`=?" }
+    private fun createWhereStatement(keys: Set<String>): String? {
+        return if (keys.size === 0) {
+            keys.joinToString(separator = " AND ", prefix = "WHERE ") { "`$it`=?" }
+        } else {
+            null
+        }
     }
 }
