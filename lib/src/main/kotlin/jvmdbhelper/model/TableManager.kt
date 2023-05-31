@@ -2,9 +2,10 @@ package jvmdbhelper.model
 
 import jvmdbhelper.DBProxy
 import jvmdbhelper.db_defenitions.Table
+import jvmdbhelper.db_defenitions.Where
 
 abstract class TableManager<T : Model> {
-    protected val table: Table by lazy {
+    private val table: Table by lazy {
         val table = Table(this.name())
         this.manageTable(table)
         table
@@ -24,7 +25,7 @@ abstract class TableManager<T : Model> {
         val queries = keys.joinToString(separator = ", ") { "?" }
         val listValues = mutableListOf<Any>()
         for (v in keys) {
-            listValues.add(values.get(v) ?: "NULL") // throw, default or null
+            listValues.add(values[v] ?: "NULL") // throw, default or null
         }
 
         dbh.exec("INSERT INTO `${this.name()}`($cols) VALUES ($queries);", listValues)
@@ -44,34 +45,32 @@ abstract class TableManager<T : Model> {
         val set = keys.joinToString(separator = ", ") { "$it=?" }
         val values = mutableListOf<Any>()
         for (v in keys) {
-            values.add(mutable.get(v) ?: "NULL") // throw, default or null
+            values.add(mutable[v] ?: "NULL") // throw, default or null
         }
         val where = this.getModelFilter(model)
         values.addAll(where.values)
 
         dbh.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
 
-        return model;
+        return model
     }
 
     fun delete(dbh: DBProxy, model: T): T {
         val where = this.getModelFilter(model)
         dbh.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
 
-        return model;
+        return model
     }
 
-    final protected fun getModelFilter(model: T): Where {
+    private fun getModelFilter(model: T): Where {
         val values = mutableListOf<Any>()
         val ids = model.getImmutable()
         val primaryKeys = this.table.getPrimaryKeys()
         val where = primaryKeys.joinToString(separator = " AND ") { "`$it`=?" }
         for (v in primaryKeys) {
-            values.add(ids.get(v) ?: throw Exception())
+            values.add(ids[v] ?: throw Exception())
         }
 
         return Where("WHERE $where", values)
     }
 }
-
-data class Where(val statement: String, val values: List<Any>) {}
