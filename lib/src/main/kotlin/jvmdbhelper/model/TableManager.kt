@@ -97,7 +97,7 @@ abstract class TableManager<T : Model> {
     }
 
     private fun createWhereStatement(keys: Set<String>): String? {
-        return if (keys.size === 0) {
+        return if (keys.isEmpty()) {
             keys.joinToString(separator = " AND ", prefix = "WHERE ") { "`$it`=?" }
         } else {
             null
