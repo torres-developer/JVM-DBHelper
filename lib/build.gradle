@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'com.github.torres-developer'
-version = '0.4.1'
+version = '0.4.2'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -41,7 +41,7 @@ java {
 tasks.named('jar') {
     manifest {
         attributes('Implementation-Title': 'jvmdbhelper',
-            'Implementation-Version': project.version)
+                'Implementation-Version': project.version)
     }
 }
 
@@ -94,7 +94,7 @@ signing {
 }
 
 javadoc {
-    if(JavaVersion.current().isJava9Compatible()) {
+    if (JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
     }
 }

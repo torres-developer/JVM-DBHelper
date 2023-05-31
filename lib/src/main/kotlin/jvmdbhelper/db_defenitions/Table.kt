@@ -19,15 +19,15 @@ class Table(private val name: String) {
 
     fun getCreateSQLQuery(): String {
         val columns =
-                cols.joinToString(separator = ",\n\t", prefix = "\n\t", postfix = "\n") {
-                    it.getSQLQuery()
-                }
+            cols.joinToString(separator = ",\n\t", prefix = "\n\t", postfix = "\n") {
+                it.getSQLQuery()
+            }
         return "CREATE TABLE `$name`($columns);"
     }
 
     fun getDropSQLQuery(): String = "DROP TABLE `$name`;"
 
     fun getPrimaryKeys(): List<String> {
-        return this.cols.filter { it.isPrimaryKey() } . map { it.getName() }
+        return this.cols.filter { it.isPrimaryKey() }.map { it.getName() }
     }
 }
