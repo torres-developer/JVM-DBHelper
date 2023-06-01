@@ -1,6 +1,6 @@
 package jvmdbhelper.db_defenitions
 
-class Column(private val name: String, private val type: Type) {
+open class Column(private val name: String, private val type: Type) {
     private var unique = false
     private var nullable = true
     private var autoIncrement = false
@@ -29,7 +29,7 @@ class Column(private val name: String, private val type: Type) {
         return "`${this.name}` ${this.type.name}" +
                 (if (this.unique) " UNIQUE" else "") +
                 "${if (this.nullable) "" else " NOT"} NULL" +
-                (if (this.autoIncrement) " AUTO_INCREMENT" else "")
+                (if (this.autoIncrement) " AUTOINCREMENT" else "")
     }
 
     fun isPrimaryKey(): Boolean = this.unique && !this.nullable
