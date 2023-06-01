@@ -4,7 +4,7 @@ import jvmdbhelper.model.Model
 import jvmdbhelper.model.TableManager
 
 interface DBProxy {
-    fun exec(sql: String, values: List<Any> = listOf())
+    fun exec(sql: String, values: List<Any> = listOf()): Long
     fun <T : Model> query(
         sql: String,
         values: List<Any> = listOf(),

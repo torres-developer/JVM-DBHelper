@@ -7,16 +7,16 @@ import jvmdbhelper.db_defenitions.Where
 
 abstract class TableManager<T : Model> {
     private val table: Table by lazy {
-        val table = Table(this.name())
+        val table = Table(this.name)
         this.manageTable(table)
         table
     }
 
-    abstract fun name(): String
+    abstract val name: String
     protected abstract fun manageTable(table: Table)
 
-    fun createTable(): String = this.table.getCreateSQLQuery()
-    fun deleteTable(): String = this.table.getDropSQLQuery()
+    fun createTable(): String = this.table.getCreate()
+    fun deleteTable(): String = this.table.getDrop()
 
     abstract fun init(): T
 
@@ -29,7 +29,7 @@ abstract class TableManager<T : Model> {
             listValues.add(values[v] ?: "NULL") // throw, default or null
         }
 
-        proxy.exec("INSERT INTO `${this.name()}`($cols) VALUES ($queries);", listValues)
+        proxy.exec("INSERT INTO `${this.name}`($cols) VALUES ($queries);", listValues)
 
         val model = this.init()
         model.fromMap(values)
@@ -48,9 +48,9 @@ abstract class TableManager<T : Model> {
             values.add(filter[v] ?: throw Exception())
         }
         return if (where is String) {
-            proxy.query("SELECT * FROM ${this.name()} $where;", values, this)
+            proxy.query("SELECT * FROM ${this.name} $where;", values, this)
         } else {
-            proxy.query("SELECT * FROM ${this.name()};", values, this)
+            proxy.query("SELECT * FROM ${this.name};", values, this)
         }
     }
 
@@ -66,9 +66,9 @@ abstract class TableManager<T : Model> {
         values.addAll(where.values)
 
         if (where.statement is String) {
-            proxy.exec("UPDATE `${this.name()}` SET $set ${where.statement};", values)
+            proxy.exec("UPDATE `${this.name}` SET $set ${where.statement};", values)
         } else {
-            proxy.exec("UPDATE `${this.name()}` SET $set;")
+            proxy.exec("UPDATE `${this.name}` SET $set;")
         }
 
         return model
@@ -77,9 +77,9 @@ abstract class TableManager<T : Model> {
     fun delete(proxy: DBProxy, model: T): T {
         val where = this.getModelFilter(model)
         if (where.statement is String) {
-            proxy.exec("DELETE FROM `${this.name()}` ${where.statement};", where.values)
+            proxy.exec("DELETE FROM `${this.name}` ${where.statement};", where.values)
         } else {
-            proxy.exec("DELETE FROM `${this.name()}`;")
+            proxy.exec("DELETE FROM `${this.name}`;")
         }
 
         return model
@@ -98,7 +98,7 @@ abstract class TableManager<T : Model> {
     }
 
     private fun createWhereStatement(keys: Set<String>): String? {
-        return if (!keys.isEmpty()) {
+        return if (keys.isNotEmpty()) {
             keys.joinToString(separator = " AND ", prefix = "WHERE ") { "`$it`=?" }
         } else {
             null

@@ -5,6 +5,9 @@ class Column(private val name: String, private val type: Type) {
     private var nullable = true
     private var autoIncrement = false
 
+    fun getName(): String = this.name
+    fun getType(): Type = this.type
+
     fun pk() = apply {
         this.unique()
         this.nullable(false)
@@ -22,15 +25,12 @@ class Column(private val name: String, private val type: Type) {
         this.autoIncrement = b
     }
 
-    fun getSQLQuery(): String {
+    fun getSQL(): String {
         return "`${this.name}` ${this.type.name}" +
                 (if (this.unique) " UNIQUE" else "") +
                 "${if (this.nullable) "" else " NOT"} NULL" +
-                (if (this.autoIncrement) " UNIQUE" else "")
+                (if (this.autoIncrement) " AUTO_INCREMENT" else "")
     }
 
     fun isPrimaryKey(): Boolean = this.unique && !this.nullable
-
-    fun getName(): String = this.name
-    fun getType(): Type = this.type
 }

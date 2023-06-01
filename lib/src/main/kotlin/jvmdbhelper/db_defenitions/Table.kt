@@ -17,15 +17,15 @@ class Table(private val name: String) {
         this.cols.putAll(cols.associateBy { it.getName() })
     }
 
-    fun getCreateSQLQuery(): String {
+    fun getCreate(): String {
         val columns =
             cols.values.joinToString(separator = ",\n\t", prefix = "\n\t", postfix = "\n") {
-                it.getSQLQuery()
+                it.getSQL()
             }
         return "CREATE TABLE `$name`($columns);"
     }
 
-    fun getDropSQLQuery(): String = "DROP TABLE `$name`;"
+    fun getDrop(): String = "DROP TABLE `$name`;"
 
     fun getPrimaryKeys(): Set<String> {
         return this.cols.values.filter { it.isPrimaryKey() }.map { it.getName() }.toSet()

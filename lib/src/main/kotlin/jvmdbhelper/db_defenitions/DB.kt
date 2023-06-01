@@ -3,17 +3,14 @@ package jvmdbhelper.db_defenitions
 import jvmdbhelper.DBHelper
 
 typealias Migrations = Map<UInt, Migration>
-typealias Seeders = Map<UInt, Seeder>
+typealias Seeders = Array<Seeder>
 
 abstract class DB {
-    abstract fun name(): String
-    abstract fun version(): UInt
+    abstract val name: String
+    abstract val version: UInt
 
-    abstract fun migrations(): Migrations
-    abstract fun seeders(): Seeders
-
-    private val migrations: Migrations by lazy { this.migrations() }
-    private val seeders: Seeders by lazy { this.seeders() }
+    protected abstract val migrations: Migrations
+    protected abstract val seeders: Seeders
 
     fun migrate(db: DBHelper, from: UInt, to: UInt) {
         val upgrading = from < to
@@ -23,8 +20,6 @@ abstract class DB {
 
             if (upgrading) {
                 m.upgrade(db)
-                val s = this.seeders[i] ?: continue
-                s.seed(db.proxy)
             } else {
                 m.downgrade(db)
             }
@@ -32,6 +27,10 @@ abstract class DB {
     }
 
     fun create(db: DBHelper) {
-        this.migrations[1u]?.upgrade(db) ?: throw Exception("No migration for first version")
+        this.migrate(db, 1u, this.version)
+
+        for (s in this.seeders) {
+            s.seed(db.proxy)
+        }
     }
 }
