@@ -10,7 +10,10 @@ class Table(private val name: String) {
     private val cols: MutableMap<String, Column> = mutableMapOf()
 
     fun addPK(col: String = "id", auto_increment: Boolean = true) = apply {
-        this.addColumn(Column(col, Type.INT).pk().autoIncrement(auto_increment))
+        this.addColumn(Column(col, Type.INT).apply {
+            pk = true
+            autoIncrement = auto_increment
+        })
     }
 
     fun addColumn(vararg cols: Column) = apply {
@@ -28,7 +31,7 @@ class Table(private val name: String) {
     fun getDrop(): String = "DROP TABLE `$name`;"
 
     fun getPrimaryKeys(): Set<String> {
-        return this.cols.values.filter { it.isPrimaryKey() }.map { it.getName() }.toSet()
+        return this.cols.values.filter { it.pk }.map { it.getName() }.toSet()
     }
 
     fun getColType(col: String): Type = this.cols[col]?.getType() ?: throw Exception()
