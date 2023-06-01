@@ -15,7 +15,7 @@ open class Column(private val name: String, private val type: Type) {
 
     fun getName(): String = this.name
     fun getType(): Type = this.type
-    fun getSQL(): String = "`${this.name}` ${this.type.name}" + (if (this.pk) {
+    fun getSQL(): String = "`${this.name}` ${this.type.type}" + (if (this.pk) {
         " PRIMARY KEY"
     } else {
         ((if (this.unique) " UNIQUE" else "") + "${if (this.nullable) "" else " NOT"} NULL")
